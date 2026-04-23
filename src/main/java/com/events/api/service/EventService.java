@@ -13,7 +13,10 @@ import org.springframework.stereotype.Service;
 import com.events.api.domain.Event;
 import com.events.api.domain.dto.event.EventRequestDTO;
 import com.events.api.domain.dto.event.EventResponseDTO;
+import com.events.api.exceptions.ResourceNotFoundException;
 import com.events.api.repositories.EventRepository;
+
+import org.springframework.transaction.annotation.Transactional;
 
 @Service
 public class EventService {
@@ -27,7 +30,8 @@ public class EventService {
     @Autowired
     UploadService uploadService;
 
-    public Event creaEvent(EventRequestDTO data) {
+    @Transactional
+    public Event createEvent(EventRequestDTO data) {
         String imgUrl = null;
         if (data.image() != null && !data.image().isEmpty()) {
             imgUrl = this.uploadService.uploadImg(data.image());
@@ -78,7 +82,7 @@ public class EventService {
 
     public EventResponseDTO findById(UUID id) {
         Event event = this.eventRepository.findById(id)
-                .orElseThrow(() -> new RuntimeException("Evento não encontrado"));
+                .orElseThrow(() -> new ResourceNotFoundException("Evento não encontrado"));
         return new EventResponseDTO(
                 event.getId(),
                 event.getTitle(),

@@ -6,6 +6,7 @@ import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.UUID;
 
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -13,12 +14,16 @@ import org.springframework.web.multipart.MultipartFile;
 public class UploadService {
 
     // Caminho onde os arquivos serão armazenados
-    private final String UPLOAD_DIR = "uploads/events/";
+    // private final String uploadDir = "uploads/events/";
+
+    // Injetado o caminho definido em application.properties
+    @Value("${app.upload.dir}")
+    private String uploadDir;
 
     public String uploadImg(MultipartFile multipartFile) {
         try {
             // 1. Cria a pasta física no Linux se ela não existir
-            File directory = new File(UPLOAD_DIR);
+            File directory = new File(uploadDir);
             if (!directory.exists()) {
                 directory.mkdirs();
             }
@@ -30,7 +35,7 @@ public class UploadService {
             String fileName = UUID.randomUUID() + "_" + cleanName;
 
             // 3. Define o caminho completo de destino
-            Path filePath = Paths.get(UPLOAD_DIR).resolve(fileName).toAbsolutePath().normalize();
+            Path filePath = Paths.get(uploadDir).resolve(fileName).toAbsolutePath().normalize();
 
             // 4. Salva o arquivo no disco (transferTo é mais seguro que Files.write)
             multipartFile.transferTo(filePath.toFile());

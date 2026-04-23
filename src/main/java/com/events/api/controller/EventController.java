@@ -25,6 +25,7 @@ import com.events.api.service.EventService;
 import com.events.api.service.FileService;
 
 import jakarta.servlet.http.HttpServletRequest;
+import jakarta.validation.Valid;
 
 @RestController
 @RequestMapping("/api/event")
@@ -37,8 +38,8 @@ public class EventController {
     private FileService fileService;
 
     @PostMapping(value = "/upload", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
-    public ResponseEntity<Event> create(@ModelAttribute EventRequestDTO body) {
-        Event newEvent = this.eventService.creaEvent(body);
+    public ResponseEntity<Event> create(@ModelAttribute @Valid EventRequestDTO body) {
+        Event newEvent = this.eventService.createEvent(body);
         return ResponseEntity.status(201).body(newEvent);
     }
 

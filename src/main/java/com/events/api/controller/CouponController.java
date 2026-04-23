@@ -14,6 +14,8 @@ import com.events.api.domain.Coupon;
 import com.events.api.domain.dto.coupon.CouponRequestDTO;
 import com.events.api.service.CouponService;
 
+import jakarta.validation.Valid;
+
 @RestController
 @RequestMapping("/api/coupon")
 public class CouponController {
@@ -22,7 +24,7 @@ public class CouponController {
     CouponService couponService;
 
     @PostMapping("/event/{id}")
-    public ResponseEntity<Coupon> create(@PathVariable UUID id, @RequestBody CouponRequestDTO data) {
+    public ResponseEntity<Coupon> create(@PathVariable UUID id, @RequestBody @Valid CouponRequestDTO data) {
         Coupon coupon = couponService.execute(id, data);
         return ResponseEntity.status(201).body(coupon);
     }
