@@ -4,16 +4,31 @@ import java.net.MalformedURLException;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.core.io.Resource;
 import org.springframework.core.io.UrlResource;
 import org.springframework.stereotype.Service;
+
+import jakarta.annotation.PostConstruct;
 
 @Service
 public class FileService {
 
     // Define a raiz como um caminho absoluto para evitar erros de localização no
     // Linux
-    private final Path root = Paths.get("uploads/events/").toAbsolutePath().normalize();
+    // private final Path root =
+    // Paths.get("uploads/events/").toAbsolutePath().normalize();
+
+    // Injetado o caminho definido em application.properties
+    @Value("${app.upload.dir}")
+    private String uploadDir;
+
+    private Path root;
+
+    @PostConstruct
+    public void init() {
+        this.root = Paths.get(uploadDir).toAbsolutePath().normalize();
+    }
 
     public Resource getFile(String fileName) {
         try {
