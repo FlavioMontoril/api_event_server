@@ -1,0 +1,7 @@
+CREATE TABLE IF NOT EXISTS address(
+    id CHAR(36) PRIMARY KEY,
+    city VARCHAR(100) NOT NULL,
+    uf CHAR(2) NOT NULL,
+    event_id CHAR(36) NOT NULL,
+    FOREIGN KEY (event_id) REFERENCES event(id) ON DELETE CASCADE
+)

@@ -1,0 +1,8 @@
+CREATE TABLE IF NOT EXISTS coupon(
+    id CHAR(36) PRIMARY KEY,
+    code VARCHAR(50) NOT NULL,
+    discount INTEGER NOT NULL,
+    valid DATETIME NOT NULL,
+    event_id CHAR(36) NOT NULL,
+    FOREIGN KEY (event_id) REFERENCES event(id) ON DELETE CASCADE
+);
