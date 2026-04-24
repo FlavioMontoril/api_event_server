@@ -11,14 +11,14 @@ import com.events.api.domain.dto.coupon.CouponRequestDTO;
 import com.events.api.repositories.CouponRepository;
 import com.events.api.repositories.EventRepository;
 
+import lombok.RequiredArgsConstructor;
+
 @Service
+@RequiredArgsConstructor
 public class CouponService {
 
-    @Autowired
-    CouponRepository couponRepository;
-
-    @Autowired
-    EventRepository eventRepository;
+    private final CouponRepository couponRepository;
+    private final EventRepository eventRepository;
 
     public Coupon execute(UUID id, CouponRequestDTO data) {
         Event event = eventRepository.findById(id)

@@ -10,7 +10,7 @@ import jakarta.validation.constraints.Size;
 
 public record CouponRequestDTO(
     @NotBlank(message = "O código do cupom é obrigatório")
-    @Size(max = 50, message = "O código deve ter no máximo 7 caracteres")
+    @Size(max = 7, message = "O código deve ter no máximo 7 caracteres")
     String code, 
     @Min(value = 1, message = "O desconto mínimo é 1%")
     @Max(value = 20, message = "O desconto máximo é 20%")

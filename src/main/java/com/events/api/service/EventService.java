@@ -4,7 +4,6 @@ import java.time.LocalDateTime;
 import java.util.List;
 import java.util.UUID;
 
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
@@ -16,22 +15,20 @@ import com.events.api.domain.dto.event.EventResponseDTO;
 import com.events.api.exceptions.ResourceNotFoundException;
 import com.events.api.repositories.EventRepository;
 
+import lombok.RequiredArgsConstructor;
+
 import org.springframework.transaction.annotation.Transactional;
 
 @Service
+@RequiredArgsConstructor
 public class EventService {
 
-    @Autowired
-    EventRepository eventRepository;
-
-    @Autowired
-    AddressService addressService;
-
-    @Autowired
-    UploadService uploadService;
+    private final EventRepository eventRepository;
+    private final AddressService addressService;
+    private final UploadService uploadService;
 
     @Transactional
-    public Event createEvent(EventRequestDTO data) {
+    public EventResponseDTO createEvent(EventRequestDTO data) {
         String imgUrl = null;
         if (data.image() != null && !data.image().isEmpty()) {
             imgUrl = this.uploadService.uploadImg(data.image());
@@ -51,7 +48,16 @@ public class EventService {
             this.addressService.createAddress(data, newEvent);
         }
 
-        return newEvent;
+        // Retornamos o DTO em vez da Entidade
+        return new EventResponseDTO(
+                newEvent.getId(),
+                newEvent.getTitle(),
+                newEvent.getDescription(),
+                newEvent.getDate(),
+                newEvent.getRemote(),
+                newEvent.getEventUrl(),
+                newEvent.getImgUrl());
+
     }
 
     public List<EventResponseDTO> allEventsPagination(int page, int size) {
