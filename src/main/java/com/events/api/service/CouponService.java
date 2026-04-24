@@ -2,7 +2,6 @@ package com.events.api.service;
 
 import java.util.UUID;
 
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.events.api.domain.Coupon;

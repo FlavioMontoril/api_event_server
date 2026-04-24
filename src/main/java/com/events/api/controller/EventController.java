@@ -20,23 +20,30 @@ import com.events.api.domain.dto.event.EventResponseDTO;
 import com.events.api.service.EventService;
 import com.events.api.service.FileService;
 
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.responses.ApiResponse;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 
 @RestController
 @RequestMapping("/api/event")
 @RequiredArgsConstructor
+@Tag(name = "Eventos", description = "Endpoints para criação e listagem de eventos")
 public class EventController {
 
     private final EventService eventService;
     private final FileService fileService;
 
+    @Operation(summary = "Criar novo evento", description = "Cria um evento e salva a imagem no disco")
+    @ApiResponse(responseCode = "201", description = "Evento criado com sucesso")
     @PostMapping(value = "/upload", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
     public ResponseEntity<EventResponseDTO> create(@ModelAttribute @Valid EventRequestDTO body) {
         EventResponseDTO newEvent = this.eventService.createEvent(body);
         return ResponseEntity.status(201).body(newEvent);
     }
 
+    @Operation(summary = "Listar todos os eventos", description = "Retorna uma lista paginada de eventos")
     @GetMapping
     public ResponseEntity<List<EventResponseDTO>> getAllEvents(@RequestParam(defaultValue = "0") int page,
             @RequestParam(defaultValue = "10") int size) {
