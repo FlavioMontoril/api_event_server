@@ -15,13 +15,14 @@ import com.events.api.domain.dto.coupon.CouponRequestDTO;
 import com.events.api.service.CouponService;
 
 import jakarta.validation.Valid;
+import lombok.RequiredArgsConstructor;
 
 @RestController
 @RequestMapping("/api/coupon")
+@RequiredArgsConstructor
 public class CouponController {
 
-    @Autowired
-    CouponService couponService;
+    private final CouponService couponService;
 
     @PostMapping("/event/{id}")
     public ResponseEntity<Coupon> create(@PathVariable UUID id, @RequestBody @Valid CouponRequestDTO data) {
